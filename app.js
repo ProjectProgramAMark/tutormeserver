@@ -5,9 +5,14 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var mongoose = require('mongoose');
+// Mongoose makes me use a different promise lib
+mongoose.Promise = require('bluebird');
+// mongoose.Promise = global.Promise;
+mongoose.connect('mongodb://@localhost:27017/tutormedb');
+
 var routes = require('./routes/index');
 var users = require('./routes/users');
-
 var app = express();
 
 // view engine setup
@@ -56,5 +61,8 @@ app.use(function(err, req, res, next) {
   });
 });
 
+app.listen(6001, function() {
+  console.log("Listening on 6001 ayyyyy lmao...");
+});
 
 module.exports = app;
