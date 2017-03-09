@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/User.js');
+var Tutor = require('../models/Tutor.js');
 
 
 /* GET home page. */
@@ -36,12 +37,27 @@ router.post('/login', function(req, res, next) {
     .then((user) => {
       if(!user) {
         res.json({authenticated: false});
+      } else {
+        res.json({authenticated: true});
       }
-
-      res.json({authenticated: true});
     })
     .catch((err) => res.sendStatus(500));
 
+});
+
+router.get('/tutors', function (req, res, next) {
+  // get the tutors
+  Tutor.find({})
+    .then((tutors) => {
+      if(!tutors) {
+        console.log("No tutors available!");
+        res.sendStatus(404);
+      } else {
+        console.log("Tutors are: ", tutors);
+        res.status(200).send(tutors);
+      }
+    })
+    .catch((err) => res.sendStatus(500));
 });
 
 
