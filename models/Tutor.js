@@ -8,6 +8,9 @@ var tutorSchema = new Schema({
     availableTimes: {type: Array, required: true}
 });
 
+//TODO: consider changing fields in availableTimes database from string to int
+
+
 var Tutor = mongoose.model('Tutor', tutorSchema);
 
 module.exports = Tutor;
