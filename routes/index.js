@@ -130,5 +130,21 @@ router.post('/appointment', function (req, res, next) {
   });
 });
 
+router.get('/appointment/:userEmail', function (req, res, next) {
+  console.log(req.params.userEmail);
+  var userEmail = req.params.userEmail;
+  Appointment.find({studentEmail: userEmail}).then((appointments) => {
+    if(!appointments) {
+      console.log("This user has no appointments!");
+      res.status(200).send(appointments);
+    } else {
+      res.status(200).send(appointments);
+    }
+  }).catch((err) => {
+    console.log(err);
+    res.sendStatus(500);
+  });
+});
+
 
 module.exports = router;
