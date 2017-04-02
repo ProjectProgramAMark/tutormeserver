@@ -146,5 +146,18 @@ router.get('/appointment/:userEmail', function (req, res, next) {
   });
 });
 
+router.delete('/appointment/:id', function (req, res, next) {
+  var _id = req.params.id;
+  Appointment.findByIdAndRemove(req.params.id, function (err, appointment) {
+    if(err) {
+      console.log(err);
+      res.sendStatus(500);
+    } else {
+      console.log("Successfully removed appointment: ", appointment);
+      res.status(200).send(appointment);
+    }
+  });
+});
+
 
 module.exports = router;
