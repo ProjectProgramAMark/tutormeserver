@@ -85,7 +85,14 @@ router.get('/tutorAvailableTimes/:tutor/:date', function (req, res, next) {
           return _.isEqual(dateQuery, availableTime.date);
         });
         // Only need to return the hour and minute, so skimming the data here
-        times = _.map(times, function(time, key) { return {"hour": time.hour, "minute": time.minute}; });
+        times = _.map(times, function(time, key) {
+          return {
+            "hourStart": time.hourStart,
+            "minuteStart": time.minuteStart,
+            "hourEnd": time.hourEnd,
+            "minuteEnd": time.minuteEnd
+          };
+        });
         res.status(200).send(times);
       }
     }).catch((err) => {
@@ -117,8 +124,10 @@ router.post('/appointment', function (req, res, next) {
   req.body.time.day = req.body.time.day.toString();
   req.body.time.month = req.body.time.month.toString();
   req.body.time.year = req.body.time.year.toString();
-  req.body.time.hour = req.body.time.hour.toString();
-  req.body.time.minute = req.body.time.minute.toString();
+  req.body.time.hourStart = req.body.time.hourStart.toString();
+  req.body.time.hourEnd = req.body.time.hourEnd.toString();
+  req.body.time.minuteStart = req.body.time.minuteStart.toString();
+  req.body.time.minuteEnd = req.body.time.minuteEnd.toString();
 
   var appointment = new Appointment(req.body);
   appointment.save(function(err, appointment) {
