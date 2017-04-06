@@ -176,5 +176,23 @@ router.delete('/appointment/:id', function (req, res, next) {
   });
 });
 
+router.get('/isTutor/:email', function (req, res, next) {
+  console.log("req.params.email: ", req.params.email);
+  var email = req.params.email;
+  Tutor.find({email: email}).then((tutor) => {
+    if(tutor.length == 0) {
+      console.log("User is not a tutor, tutor functions denied! Tutor: ", tutor);
+      res.status(403).json({forbidden: true});
+    } else {
+      // user is a tutor because email matched
+      console.log("user is a tutor: ", tutor);
+      res.status(200).json({forbidden: false});
+    }
+  }).catch((err) => {
+    console.log(err);
+    res.sendStatus(500);
+  });
+});
+
 
 module.exports = router;
