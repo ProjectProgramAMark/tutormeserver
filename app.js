@@ -11,6 +11,16 @@ mongoose.Promise = require('bluebird');
 // mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://@localhost:27017/tutormedb');
 
+// Initializing Firebase for FCM for notifications
+admin = require('firebase-admin');
+// var serviceAccount = require("./res/private_res/tutor-me-database-key.pem");
+var serviceAccount = require('./res/private_res/tutorme-7fd02-firebase-adminsdk-g3uz7-c7d00f045d.json');
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://tutorme-7fd02.firebaseio.com"
+});
+
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var app = express();

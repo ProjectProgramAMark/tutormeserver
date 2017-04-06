@@ -3,6 +3,7 @@ var router = express.Router();
 var User = require('../models/User.js');
 var Tutor = require('../models/Tutor.js');
 var Appointment = require('../models/Appointment.js');
+var notifications = require('../middleware/notifications');
 
 //TODO: figure out how to globalize underscore library (not too important)
 var _ = require('underscore');
@@ -135,6 +136,13 @@ router.post('/appointment', function (req, res, next) {
         console.log(err);
         return res.sendStatus(500);
     }
+
+    // call function here to schedule node-schedule Job
+    // for sending notifications to the phone via FCM
+    // save jobs to own database so if server goes offline
+    // it recreates those jobs
+    notifications.scheduleJob(req.body);
+
     return res.status(201).json(appointment);
   });
 });
