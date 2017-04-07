@@ -14,7 +14,7 @@ mongoose.connect('mongodb://@localhost:27017/tutormedb');
 // Initializing Firebase for FCM for notifications
 admin = require('firebase-admin');
 // var serviceAccount = require("./res/private_res/tutor-me-database-key.pem");
-var serviceAccount = require('./res/private_res/tutorme-7fd02-firebase-adminsdk-g3uz7-c7d00f045d.json');
+var serviceAccount = require('./res/private_res/tutorabull-firebase-adminsdk-9ns7k-0b71c1443b.json');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
