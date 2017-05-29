@@ -65,6 +65,43 @@ router.get('/tutors', function (req, res, next) {
     .catch((err) => res.sendStatus(500));
 });
 
+router.get('/users', function (req, res, next) {
+  // get the users
+  User.find({})
+    .then((users) => {
+      if(!users) {
+        console.log("No users available!");
+        res.sendStatus(404);
+      } else {
+        // console.log("Users are: ", users);
+        res.status(200).send(users);
+      }
+    })
+    .catch((err) => res.sendStatus(500));
+});
+
+// Gets specific user based on email
+router.get('/users/:userEmail', function (req, res, next) {
+  console.log(req.params);
+  var userEmail = req.params.userEmail;
+  // get the user
+  User.find({ "email": userEmail})
+    .then((user) => {
+      if(!user) {
+        console.log("No users available!");
+        res.sendStatus(404);
+      } else {
+        console.log("User is: ", user[0]);
+        res.status(200).send(user[0]);
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(500);
+    })
+});
+
+
 router.get('/tutorAvailableTimes/:tutor/:date', function (req, res, next) {
   console.log(req.params);
   var tutorQuery = req.params.tutor;
@@ -194,5 +231,24 @@ router.get('/isTutor/:email', function (req, res, next) {
   });
 });
 
+router.post('/updateToken', function (req, res, next) {
+  console.log(req.body);
+  var userEmail = req.body.userEmail;
+  var newToken = req.body.newToken;
+  User.findOneAndUpdate({ "email": userEmail}, {"registrationToken": newToken})
+    .then((user) => {
+      if(!user) {
+        console.log("No users available!");
+        res.sendStatus(404);
+      } else {
+        console.log("User is updated: ", user);
+        res.json({"success": "true"});
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(500);
+    })
+});
 
 module.exports = router;
