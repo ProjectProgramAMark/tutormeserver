@@ -10,7 +10,8 @@ var mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 // mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://@localhost:27017/tutormedb');
-
+// For repopulating notification jobs function on start of server
+var notifications = require('./middleware/notifications');
 // Initializing Firebase for FCM for notifications
 admin = require('firebase-admin');
 // var serviceAccount = require("./res/private_res/tutor-me-database-key.pem");
@@ -71,7 +72,11 @@ app.use(function(err, req, res, next) {
   });
 });
 
+
 app.listen(6001, function() {
+  // function to repopulate Jobs for notifications when started
+  console.log("app.use is being called for repopulateNotifications!");
+  notifications.rePopulateNotifications();
   console.log("Listening on 6001 ayyyyy lmao...");
 });
 

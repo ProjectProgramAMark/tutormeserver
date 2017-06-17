@@ -3,6 +3,7 @@ var router = express.Router();
 var User = require('../models/User.js');
 var Tutor = require('../models/Tutor.js');
 var Appointment = require('../models/Appointment.js');
+var Job = require('../models/Job.js');
 var notifications = require('../middleware/notifications');
 
 //TODO: figure out how to globalize underscore library (not too important)
@@ -248,7 +249,34 @@ router.post('/updateToken', function (req, res, next) {
     .catch((err) => {
       console.log(err);
       res.sendStatus(500);
+    });
+
+// Since registration token for User was updated, need to reflect those changes in
+// any Jobs they might have had scheduled on the database so the notification
+// reaches the right device
+  Job.find({"studentEmail": userEmail})
+    .then((jobs) => {
+      if(jobs.length == 0) {
+        console.log("No jobs to update token for here!");
+        return;
+      } else {
+        jobs.forEach(function(job) {
+          console.log("updating registration token for: ", job);
+          Job.findOneAndUpdate({ _id: job._id }, {registrationToken: newToken },
+            function(err, newJob) {
+              if(err) {
+                throw err;
+              } else {
+                console.log("Job successfully updated: ", newJob);
+              }
+            });
+        });
+      }
     })
+    .catch((err) => {
+      console.log(err);
+      throw err;
+    });
 });
 
 module.exports = router;
